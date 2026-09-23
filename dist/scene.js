@@ -19,7 +19,7 @@ function showFallback() {
   stage.addEventListener('pointermove',event=>{if(pointer===null)return;fallbackAngle+=(event.clientX-pointer)*.6;pointer=event.clientX;fallback.style.transform=`rotateY(${fallbackAngle}deg)`;});
   const stop=()=>pointer=null;window.addEventListener('pointerup',stop);stage.addEventListener('pointercancel',stop);stage.addEventListener('pointerleave',stop);
   stage.addEventListener('keydown',event=>{if(event.target===stage&&(event.key==='ArrowLeft'||event.key==='ArrowRight')){event.preventDefault();fallbackAngle+=event.key==='ArrowLeft'?-20:20;fallback.style.transform=`rotateY(${fallbackAngle}deg)`;}});
-  const colors={rose:'#c58f7b',champagne:'#d2b271',pearl:'#c4b5d2'};
+  const colors = {silver:'#bfc2c5',graphite:'#414448',pearl:'#f0f0ed'};
   document.querySelectorAll('[data-scene-color]').forEach(button=>button.addEventListener('click',()=>{stage.style.setProperty('--fallback-metal',colors[button.dataset.sceneColor]);document.querySelectorAll('[data-scene-color]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));}));
   motionButton.textContent = paused ? 'Play motion ▷' : 'Pause motion Ⅱ';
 }
@@ -53,7 +53,7 @@ try {
 
   // An actual three-dimensional light studio, reflected in the sculpture.
   const room = new THREE.Scene();
-  room.background = new THREE.Color('#211821');
+  room.background = new THREE.Color('#1b1b1b');
   const panelGeometry = new THREE.PlaneGeometry(1, 1);
   geometries.push(panelGeometry);
   function panel(color, intensity, x, y, z, sx, sy, rotationY = 0) {
@@ -62,29 +62,29 @@ try {
     const mesh = new THREE.Mesh(panelGeometry, mat);
     mesh.position.set(x, y, z); mesh.scale.set(sx, sy, 1); mesh.rotation.y = rotationY; room.add(mesh);
   }
-  panel('#fff6e5', 5, -4, 1, 3, 2, 8, .55);
-  panel('#ffe2d0', 4, 4, 1, 2, 1.5, 7, -.6);
+  panel('#f7f7f7', 5, -4, 1, 3, 2, 8, .55);
+  panel('#e7e7e7', 4, 4, 1, 2, 1.5, 7, -.6);
   panel('#ffffff', 3, 0, 5, 0, 8, 3, 0);
-  panel('#cba0dc', 2, 0, -2, -5, 7, 4, 0);
-  panel('#ffefe1', 2, -1, 0, 6, .4, 6, 0);
+  panel('#adadad', 2, 0, -2, -5, 7, 4, 0);
+  panel('#f1f1f1', 2, -1, 0, 6, .4, 6, 0);
   const pmrem = new THREE.PMREMGenerator(renderer);
   const environment = pmrem.fromScene(room, .055, .1, 40);
   scene.environment = environment.texture;
   pmrem.dispose();
-  scene.add(new THREE.HemisphereLight(0xfff4e8, 0x311f35, 2));
-  const light = new THREE.DirectionalLight(0xffdfc0, 4); light.position.set(-3, 5, 6); scene.add(light);
-  const rim = new THREE.DirectionalLight(0xcfb8ff, 3); rim.position.set(4, -1, 2); scene.add(rim);
+  scene.add(new THREE.HemisphereLight(0xf5f5f5, 0x242424, 2));
+  const light = new THREE.DirectionalLight(0xe4e4e4, 4); light.position.set(-3, 5, 6); scene.add(light);
+  const rim = new THREE.DirectionalLight(0xc2c2c2, 3); rim.position.set(4, -1, 2); scene.add(rim);
 
   const sculpture = new THREE.Group();
   sculpture.rotation.set(.22, -.3, -.28);
   scene.add(sculpture);
-  const rose = new THREE.MeshPhysicalMaterial({color:0xd99f8d, metalness:.93, roughness:.17, clearcoat:1, clearcoatRoughness:.08, envMapIntensity:1.4});
-  const pearl = new THREE.MeshPhysicalMaterial({color:0xffeee1, metalness:.25, roughness:.14, clearcoat:1, iridescence:1, iridescenceIOR:1.3, envMapIntensity:1.2});
-  const gold = new THREE.MeshPhysicalMaterial({color:0xeec69b, metalness:1, roughness:.2, envMapIntensity:1.8});
-  materials.push(rose, pearl, gold);
+  const silver = new THREE.MeshPhysicalMaterial({color:0xbfc2c5, metalness:.93, roughness:.17, clearcoat:1, clearcoatRoughness:.08, envMapIntensity:1.4});
+  const pearl = new THREE.MeshPhysicalMaterial({color:0xf1f1f1, metalness:.25, roughness:.14, clearcoat:1, iridescence:.2, iridescenceIOR:1.3, envMapIntensity:1.2});
+  const chrome = new THREE.MeshPhysicalMaterial({color:0xcbcbcb, metalness:1, roughness:.2, envMapIntensity:1.8});
+  materials.push(silver, pearl, chrome);
   const ribbonGeometry = new THREE.TorusKnotGeometry(1.38, .44, 190, 28, 2, 3);
   geometries.push(ribbonGeometry);
-  const ribbon = new THREE.Mesh(ribbonGeometry, rose);
+  const ribbon = new THREE.Mesh(ribbonGeometry, silver);
   sculpture.add(ribbon);
   const centerGeometry = new THREE.SphereGeometry(.57, 40, 28);
   geometries.push(centerGeometry);
@@ -92,15 +92,15 @@ try {
   center.position.set(.1,.1,.9); sculpture.add(center);
   const orbitGeometry = new THREE.TorusGeometry(2.3, .013, 8, 150);
   geometries.push(orbitGeometry);
-  const orbit = new THREE.Mesh(orbitGeometry, gold);
+  const orbit = new THREE.Mesh(orbitGeometry, chrome);
   orbit.rotation.set(1.05,.3,-.4); sculpture.add(orbit);
-  const orbit2 = new THREE.Mesh(orbitGeometry, gold);
+  const orbit2 = new THREE.Mesh(orbitGeometry, chrome);
   orbit2.scale.setScalar(1.13); orbit2.rotation.set(.2,1.1,.6); sculpture.add(orbit2);
   const sphereGeometry = new THREE.SphereGeometry(1, 28, 20);
   geometries.push(sphereGeometry);
   const satellites = [];
   for (let i=0; i<5; i++) {
-    const mesh = new THREE.Mesh(sphereGeometry, i%2 ? gold : pearl);
+    const mesh = new THREE.Mesh(sphereGeometry, i%2 ? chrome : pearl);
     mesh.scale.setScalar([.21,.14,.32,.11,.18][i]);
     scene.add(mesh); satellites.push(mesh);
   }
@@ -108,10 +108,10 @@ try {
   const dustPositions = new Float32Array(90*3);
   for(let i=0;i<90;i++) { dustPositions[i*3]=(Math.random()-.5)*11; dustPositions[i*3+1]=(Math.random()-.5)*9; dustPositions[i*3+2]=-2-Math.random()*4; }
   dustGeometry.setAttribute('position',new THREE.BufferAttribute(dustPositions,3)); geometries.push(dustGeometry);
-  const dustMaterial = new THREE.PointsMaterial({color:0xe9c8aa,size:.025,transparent:true,opacity:.6,depthWrite:false});materials.push(dustMaterial);
+  const dustMaterial = new THREE.PointsMaterial({color:0xcdcdcd,size:.025,transparent:true,opacity:.6,depthWrite:false});materials.push(dustMaterial);
   const dust = new THREE.Points(dustGeometry,dustMaterial);scene.add(dust);
-  const colors = {rose:'#d99f8d',champagne:'#e8c58b',pearl:'#e8dcf4'};
-  let targetColor = new THREE.Color(colors.rose), pointerX = 0, pointerY = 0;
+  const colors = {silver:'#bfc2c5',graphite:'#414448',pearl:'#f0f0ed'};
+  let targetColor = new THREE.Color(colors.silver), pointerX = 0, pointerY = 0;
   let width = 1, height = 1;
   function draw() {
     const reducedTime = paused ? 0 : phase;
@@ -122,7 +122,7 @@ try {
     sculpture.position.y = Math.sin(reducedTime*.65)*.14;
     orbit.rotation.z = -.4 + reducedTime*.12;
     orbit2.rotation.z = .6 - reducedTime*.16;
-    rose.color.lerp(targetColor, paused ? 1 : .055);
+    silver.color.lerp(targetColor, paused ? 1 : .055);
     satellites.forEach((sphere,i) => {
       const angle = i*Math.PI*2/5 + reducedTime*(i%2 ? -.19 : .23);
       sphere.position.set(Math.cos(angle)*(2.6+i*.08),Math.sin(angle)*(2.5+i*.08),Math.sin(angle*.8)*1.2);

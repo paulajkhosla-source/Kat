@@ -1,6 +1,10 @@
 # Kat Aesthetics
 
-Responsive, self-contained static website built from the supplied design. All photography is displayed from the supplied reference using CSS crops. Three.js is vendored locally and renders a reflective rose-gold sculpture with orbiting pearls, pointer/keyboard rotation and selectable finishes. Reduced motion, visibility pausing and an animated CSS 3D sculpture fallback are supported. The editorial redesign adds animated typography, a moving brand ribbon, scroll reveals and dimensional treatment cards.
+Responsive, self-contained static website built from the supplied design. All photography is displayed from the supplied reference using CSS crops. Three.js is vendored locally and renders a reflective silver sculpture with orbiting pearls, pointer/keyboard rotation and selectable finishes. Reduced motion, visibility pausing and an animated CSS 3D sculpture fallback are supported. The editorial redesign adds animated typography, a moving brand ribbon, scroll reveals and dimensional treatment cards.
+
+## Brand
+
+The supplied `kat aesthetics. / BEAUTY CLINIC` logo is used directly from `dist/assets/kat-brand.jpg`. CSS removes the photographed background visually without changing the original asset. The black, silver, pearl and textured-grey identity is applied throughout the site, including both 3D renderers and every form/dialog. `dist/brand.css` contains the brand-specific layout refinements.
 
 ## Included
 - Responsive desktop/mobile navigation, anchor tracking and keyboard controls.
