@@ -12,8 +12,15 @@ const materials = [], geometries = [];
 function showFallback() {
   host.hidden = true;
   stage.classList.add('scene-fallback');
-  document.querySelector('.scene-instruction').textContent = 'BEAUTY, IN YOUR OWN LIGHT';
-  document.querySelector('.scene-palettes').hidden = true;
+  document.querySelector('.scene-instruction').innerHTML = 'DRAG TO DISCOVER <span>↔</span>';
+  let fallbackAngle = 0, pointer = null;
+  const fallback = document.querySelector('.fallback-rotation');
+  stage.addEventListener('pointerdown',event=>{if(!event.target.closest('button'))pointer=event.clientX;});
+  stage.addEventListener('pointermove',event=>{if(pointer===null)return;fallbackAngle+=(event.clientX-pointer)*.6;pointer=event.clientX;fallback.style.transform=`rotateY(${fallbackAngle}deg)`;});
+  const stop=()=>pointer=null;window.addEventListener('pointerup',stop);stage.addEventListener('pointercancel',stop);stage.addEventListener('pointerleave',stop);
+  stage.addEventListener('keydown',event=>{if(event.target===stage&&(event.key==='ArrowLeft'||event.key==='ArrowRight')){event.preventDefault();fallbackAngle+=event.key==='ArrowLeft'?-20:20;fallback.style.transform=`rotateY(${fallbackAngle}deg)`;}});
+  const colors={rose:'#c58f7b',champagne:'#d2b271',pearl:'#c4b5d2'};
+  document.querySelectorAll('[data-scene-color]').forEach(button=>button.addEventListener('click',()=>{stage.style.setProperty('--fallback-metal',colors[button.dataset.sceneColor]);document.querySelectorAll('[data-scene-color]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));}));
   motionButton.textContent = paused ? 'Play motion ▷' : 'Pause motion Ⅱ';
 }
 function syncMotion() {
@@ -146,4 +153,4 @@ try {
   renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(animation);showFallback();});
   stage.classList.add('scene-ready');resize();restart();
   window.addEventListener('pagehide',()=>{cancelAnimationFrame(animation);resizeObserver.disconnect();visibility.disconnect();environment.dispose();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());renderer.dispose();});
-}catch(error){console.warn('3D scene unavailable; showing beauty portrait.',error);showFallback();}
+}catch(error){console.warn('WebGL unavailable; using CSS 3D sculpture.',error);showFallback();}
