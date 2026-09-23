@@ -1,6 +1,6 @@
 # Kat Aesthetics
 
-Responsive, self-contained static website built from the supplied design. All photography is displayed from the supplied reference using CSS crops. Three.js is vendored locally and adds a lightweight decorative hero effect; reduced motion, visibility pausing and WebGL fallback are supported.
+Responsive, self-contained static website built from the supplied design. All photography is displayed from the supplied reference using CSS crops. Three.js is vendored locally and renders a reflective rose-gold sculpture with orbiting pearls, pointer/keyboard rotation and selectable finishes. Reduced motion, visibility pausing and a portrait fallback are supported. The editorial redesign adds animated typography, a moving brand ribbon, scroll reveals and dimensional treatment cards.
 
 ## Included
 - Responsive desktop/mobile navigation, anchor tracking and keyboard controls.
